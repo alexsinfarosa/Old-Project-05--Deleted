@@ -22,7 +22,7 @@ const styles = {
 class App extends Component {
   render() {
     const { classes } = this.props;
-    const { data, isInfo } = this.props.rootStore.paramsStore;
+    const { isInfo } = this.props.rootStore.paramsStore;
     return (
       <div className={classes.root}>
         <AppHeader />

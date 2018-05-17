@@ -4,9 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import withRoot from "../withRoot";
 
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
 import KeyboardBackspace from "@material-ui/icons/KeyboardBackspace";
 
 const styles = theme => ({

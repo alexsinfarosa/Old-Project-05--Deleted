@@ -19,7 +19,6 @@ const styles = theme => ({
 class Main extends Component {
   render() {
     const { classes } = this.props;
-    const { toggleInfo } = this.props.rootStore.paramsStore;
     return (
       <div className={classes.root}>
         <Typography>
