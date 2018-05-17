@@ -21,7 +21,7 @@ const styles = theme => ({
 class Instructions extends Component {
   render() {
     const { classes } = this.props;
-    const { toggleInfo } = this.props.rootStore.paramsStore;
+    const { toggleInfo } = this.props.rootStore;
     return (
       <div className={classes.root}>
         <IconButton

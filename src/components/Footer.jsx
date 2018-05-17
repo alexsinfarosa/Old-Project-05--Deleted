@@ -24,7 +24,7 @@ const styles = theme => ({
 class Footer extends Component {
   render() {
     const { classes } = this.props;
-    const { isInfo, toggleInfo } = this.props.rootStore.paramsStore;
+    const { isInfo, toggleInfo } = this.props.rootStore;
     return (
       <Fragment>
         <Typography variant="caption" className={classes.footer}>
