@@ -2,7 +2,7 @@ import { decorate, observable, action, when, computed } from "mobx";
 import { states } from "../assets/states";
 import { fetchAllStations } from "../utils/fetchData";
 import { idAdjustment } from "../utils/utils";
-import { format, subDays } from "date-fns";
+import { getYear, format, subDays, isAfter } from "date-fns/esm";
 import { elements } from "../assets/elements";
 import { growthRates } from "../assets/growthRates";
 
@@ -45,20 +45,30 @@ export default class ParamsStore {
     }
   }
 
-  // Dates
-  sDate = new Date(); // date of interest
+  // Dates ------------------------------------------------------------------------
+  sDate = "2017-06-16"; // date of interest. MUST BE A STRING, not a date obj.
   setStartDate = d => (this.sDate = d);
-  eDate = new Date();
-  setEndDate = d => (this.eDate = d);
+  currentYear = getYear(new Date());
+  endOfSeason = `${getYear(this.sDate)}-07-01`;
+  setEndOfSeason = d => (this.endOfSeason = d);
+  get eDate() {
+    if (this.sDate) {
+      return this.currentYear === this.year
+        ? new Date()
+        : isAfter(this.sDate, this.endOfSeason)
+          ? null
+          : this.endOfSeason;
+    }
+  }
 
   // parameters to make the call
   get params() {
     const { station, sDate, eDate } = this;
-    if (station) {
+    if (station && sDate && eDate) {
       return {
         sid: `${idAdjustment(station)} ${station.network}`,
-        sdate: format(subDays(new Date(sDate), 1), "YYYY-MM-dd"),
-        edate: format(eDate, "YYYY-MM-dd"),
+        sdate: format(subDays(sDate, 1), "yyyy-MM-dd"),
+        edate: format(eDate, "yyyy-MM-dd"),
         elems: [elements["temp"][this.station.network]]
       };
     }
@@ -79,6 +89,8 @@ decorate(ParamsStore, {
   setStationID: action,
   station: computed,
   sDate: observable,
-  eDate: observable,
+  endOfSeason: observable,
+  setEndOfSeason: action,
+  eDate: computed,
   params: computed
 });

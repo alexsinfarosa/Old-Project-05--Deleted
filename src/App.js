@@ -23,8 +23,8 @@ class App extends Component {
   render() {
     const { classes } = this.props;
     const { isInfo } = this.props.rootStore;
-    // const { params, varieties } = this.props.rootStore.paramsStore;
-    // console.log(params, varieties);
+    const { params } = this.props.rootStore.paramsStore;
+    console.log(params);
     return (
       <div className={classes.root}>
         <AppHeader />

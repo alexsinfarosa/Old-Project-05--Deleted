@@ -1,4 +1,4 @@
-import { isSameYear } from "date-fns";
+import { isSameYear } from "date-fns/esm";
 import {
   fahrenheitToCelcius,
   averageMissingValues,

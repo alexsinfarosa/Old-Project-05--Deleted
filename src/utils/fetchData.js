@@ -1,5 +1,5 @@
 import axios from "axios";
-import { format, isSameYear, addDays } from "date-fns/esm/fp";
+import { format, isSameYear, addDays } from "date-fns/esm";
 
 const protocol = window.location.protocol;
 const dateFormat = "YYYY-MM-DD";

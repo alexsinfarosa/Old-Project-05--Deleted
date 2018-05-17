@@ -6,7 +6,7 @@ import {
   setMinutes,
   setSeconds,
   isEqual
-} from "date-fns";
+} from "date-fns/esm";
 
 // Handling ID adjustment
 export const idAdjustment = station => {
