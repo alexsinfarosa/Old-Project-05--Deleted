@@ -1,5 +1,6 @@
 import axios from "axios";
 import { format, isSameYear, addDays } from "date-fns/esm";
+import cleanFetchedData from "./cleanFetchedData";
 
 const protocol = window.location.protocol;
 const dateFormat = "yyyy-MM-dd";
@@ -30,7 +31,7 @@ const fetchSisterStationIdAndNetwork = params => {
   return axios(`${sisterIdNetworkUrl}/${id}/${network}`)
     .then(res => res.data.temp)
     .catch(err =>
-      console.log("Failed to load sister station's id and network", err)
+      console.log("Failed to load sister station id and network", err)
     );
 };
 
@@ -82,6 +83,9 @@ export default async params => {
   results.set("currentStn", currentStation.data);
   results.set("sisterStn", sisterStation.data);
 
-  console.log(results);
-  return results;
+  // clean data
+  return cleanFetchedData(results, params);
+
+  // console.log(results);
+  // return results;
 };

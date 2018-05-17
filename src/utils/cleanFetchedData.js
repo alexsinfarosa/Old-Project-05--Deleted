@@ -1,13 +1,13 @@
-import { isSameYear } from "date-fns/esm";
+import { isSameYear, getHours } from "date-fns/esm";
 import {
-  fahrenheitToCelcius,
   averageMissingValues,
   flatten,
   unflatten,
-  formatTime
-} from "../utils/utils";
+  dailyToHourlyDates
+} from "./utils";
 
-export default (acisData, asJson) => {
+export default (acisData, params) => {
+  let lastDate = params.edate;
   // current station
   const currentStn = acisData.get("currentStn");
 
@@ -30,35 +30,43 @@ export default (acisData, asJson) => {
   replaced = averageMissingValues(replaced);
 
   // if date of interest is in current year
-  if (isSameYear(new Date(), new Date(asJson.dateOfInterest))) {
+  if (isSameYear(new Date(), new Date(params.sdate))) {
     const forecast = acisData.get("forecast");
+    dates = forecast.map(arr => arr[0]);
+    lastDate = dates.slice(-1)[0];
     const forecastValues = flatten(forecast.map(arr => arr[1]));
+    const onlyForecastDays = forecastValues.slice(-120).map(t => t.toString());
 
     // replace missing values with forecast data
     replaced = replaced.map(
-      (t, i) => (t === "M" ? fahrenheitToCelcius(forecastValues[i]) : t)
+      (t, i) => (t === "M" ? forecastValues[i].toString() : t)
     );
+
+    // adding the 5 days forecast data
+    replaced = [...replaced, ...onlyForecastDays];
   }
 
+  // Since data comes back as 1am-24am, we need to shift the arry [0,23] one hour forward
+  replaced = ["null", ...replaced.slice(0, -1)];
+  const hourlyDatesList = dailyToHourlyDates(params.sdate, lastDate);
+
   const replacedUnflattened = unflatten(replaced);
-  let results = new Map();
-  replacedUnflattened.forEach((day, i) => results.set(dates[i], day));
+  const hourlyDatesListUnflatted = unflatten(hourlyDatesList);
 
-  // transforming data to account for Day Light Tiem Saving
-  let resultsDLT = new Map();
-  const tzo = acisData.get("tzo");
-  const len = replacedUnflattened.length - 1;
-  replacedUnflattened.forEach((arr, i) => {
-    let day = arr.map((t, j) => formatTime(dates[i], j, tzo));
-    if (i === len) day = day.slice(0, 23);
+  // console.log(hourlyDatesListUnflatted);
+  // console.log(replacedUnflattened);
 
-    let dayDLT = day.map((date, j) => {
-      const [d, hr] = date.split(" ");
-      return results.get(d)[hr];
+  // convert hourly dates from standard time to local time
+  let results = [];
+  hourlyDatesListUnflatted.forEach((day, i) => {
+    day.forEach((h, j) => {
+      const time = getHours(h);
+      let p = {};
+      p.date = h;
+      p.temp = replacedUnflattened[i][time];
+      results.push(p);
     });
-    resultsDLT.set(dates[i], dayDLT);
   });
-  // console.log(results);
-  // console.log(resultsDLT);
-  return resultsDLT;
+  console.log(results);
+  return results;
 };
