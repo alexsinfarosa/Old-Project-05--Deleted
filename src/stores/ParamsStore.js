@@ -2,7 +2,7 @@ import { decorate, observable, action, when, computed } from "mobx";
 import { states } from "../assets/states";
 import { fetchAllStations } from "../utils/fetchData";
 import { idAdjustment } from "../utils/utils";
-import { getYear, format, subDays, isAfter } from "date-fns/esm";
+import { getYear, format, subDays, isAfter, isSameYear } from "date-fns/esm";
 import { elements } from "../assets/elements";
 import { growthRates } from "../assets/growthRates";
 
@@ -46,18 +46,18 @@ export default class ParamsStore {
   }
 
   // Dates ------------------------------------------------------------------------
-  sDate = "2017-06-16"; // date of interest. MUST BE A STRING, not a date obj.
+  sDate = "2018-05-15"; // date of interest. MUST BE A STRING, not a date obj.
   setStartDate = d => (this.sDate = d);
-  currentYear = getYear(new Date());
   endOfSeason = `${getYear(this.sDate)}-07-01`;
   setEndOfSeason = d => (this.endOfSeason = d);
   get eDate() {
     if (this.sDate) {
-      return this.currentYear === this.year
-        ? new Date()
-        : isAfter(this.sDate, this.endOfSeason)
-          ? null
-          : this.endOfSeason;
+      if (!isSameYear(new Date(), new Date(this.sDate))) {
+        if (isAfter(new Date(this.sDate), new Date(this.endOfSeason))) return;
+        return this.endOfSeason;
+      } else {
+        return new Date();
+      }
     }
   }
 
