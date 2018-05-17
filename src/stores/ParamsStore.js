@@ -46,7 +46,9 @@ export default class ParamsStore {
   }
 
   // Dates ------------------------------------------------------------------------
-  /** sDate is the date of interest. It must be of type string and not a date object because it is passed in the subDays function */
+  /**
+   sDate is the date of interest. It must be of type string and not a date object because it is passed in the subDays function. We must preserve the hour.
+   */
   sDate = "2018-03-9";
   setStartDate = d => (this.sDate = d);
   endOfSeason = `${getYear(this.sDate)}-07-01`;
