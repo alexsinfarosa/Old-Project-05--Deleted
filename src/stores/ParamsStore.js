@@ -53,7 +53,7 @@ export default class ParamsStore {
   /**
    sDate is the date of interest. It must be of type string and not a date object because it is passed in the subDays function. We must preserve the hour.
    */
-  sDate = new Date("2018-05-15 10:00");
+  sDate = new Date("2018-05-10 10:00");
   setStartDate = d => (this.sDate = d);
   endOfSeason = `${getYear(this.sDate)}-07-01 23:00`;
   setEndOfSeason = d => (this.endOfSeason = d);
@@ -77,7 +77,7 @@ export default class ParamsStore {
         sid: `${idAdjustment(station)} ${station.network}`,
         sdate: format(subDays(startDate, 1), "yyyy-MM-dd"),
         sdateUnformatted: sDate,
-        edateUnformatted: sDate,
+        edateUnformatted: eDate,
         edate: format(eDate, "yyyy-MM-dd"),
         elems: [elements["temp"][this.station.network]]
       };

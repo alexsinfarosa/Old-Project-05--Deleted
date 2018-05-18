@@ -13,7 +13,7 @@ export default class RootStore {
 
   // logic -------------------------------------------------------------------
   isLoading = false;
-  isInfo = true;
+  isInfo = false; // put back to false
   toggleInfo = d => (this.isInfo = !this.isInfo);
 
   // fetch data --------------------------------------------------------------

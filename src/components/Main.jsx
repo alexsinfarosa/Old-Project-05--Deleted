@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+
+// components
+import TopControlBar from "./TopControlBar";
+
+// material-ui
 import { withStyles } from "@material-ui/core/styles";
 import withRoot from "../withRoot";
-
 import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
@@ -21,6 +25,7 @@ class Main extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <TopControlBar />
         <Typography>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
           dolores porro obcaecati maiores incidunt delectus eius omnis, debitis

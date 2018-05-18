@@ -1,3 +1,4 @@
+import currentModel from "./currentModel";
 import { isSameYear, getHours, isWithinInterval } from "date-fns/esm";
 import {
   averageMissingValues,
@@ -54,13 +55,11 @@ export default (acisData, params) => {
   const replacedUnflattened = unflatten(replaced);
   const hourlyDatesListUnflatted = unflatten(hourlyDatesList);
 
-  // console.log(hourlyDatesListUnflatted);
-  // console.log(replacedUnflattened);
-
   // convert hourly dates from standard time to local time
   let results = [];
   hourlyDatesListUnflatted.forEach((day, i) => {
     day.forEach((h, j) => {
+      // make sure we return only the correct range of hourly dates
       if (
         isWithinInterval(h, {
           start: params.sdateUnformatted,
@@ -76,6 +75,6 @@ export default (acisData, params) => {
     });
   });
 
-  console.log(results);
-  return results;
+  // console.log(results);
+  return currentModel(results, params);
 };
