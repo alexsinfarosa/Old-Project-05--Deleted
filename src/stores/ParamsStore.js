@@ -19,6 +19,10 @@ export default class ParamsStore {
     return growthRates.map(v => v.name);
   }
 
+  // average style length ------------------------------------------------------
+  avgStyleLength;
+  setAvgStyleLength = d => (this.avgStyleLength = d);
+
   // states ---------------------------------------------------------------------
   stateIDs = Object.keys(states);
   get states() {
@@ -49,9 +53,9 @@ export default class ParamsStore {
   /**
    sDate is the date of interest. It must be of type string and not a date object because it is passed in the subDays function. We must preserve the hour.
    */
-  sDate = "2018-03-9";
+  sDate = new Date("2018-05-15 10:00");
   setStartDate = d => (this.sDate = d);
-  endOfSeason = `${getYear(this.sDate)}-07-01`;
+  endOfSeason = `${getYear(this.sDate)}-07-01 23:00`;
   setEndOfSeason = d => (this.endOfSeason = d);
   get eDate() {
     if (this.sDate) {
@@ -67,10 +71,13 @@ export default class ParamsStore {
   // parameters to make the call
   get params() {
     const { station, sDate, eDate } = this;
+    const startDate = format(sDate, "yyyy-MM-dd");
     if (station && sDate && eDate) {
       return {
         sid: `${idAdjustment(station)} ${station.network}`,
-        sdate: format(subDays(sDate, 1), "yyyy-MM-dd"),
+        sdate: format(subDays(startDate, 1), "yyyy-MM-dd"),
+        sdateUnformatted: sDate,
+        edateUnformatted: sDate,
         edate: format(eDate, "yyyy-MM-dd"),
         elems: [elements["temp"][this.station.network]]
       };
@@ -82,6 +89,8 @@ decorate(ParamsStore, {
   variety: observable,
   setVariety: action,
   varieties: computed,
+  avgStyleLength: observable,
+  setAvgStyleLength: action,
   stateIDs: observable,
   states: computed,
   postalCode: observable,

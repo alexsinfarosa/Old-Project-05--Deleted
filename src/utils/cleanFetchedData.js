@@ -1,4 +1,4 @@
-import { isSameYear, getHours } from "date-fns/esm";
+import { isSameYear, getHours, isWithinInterval } from "date-fns/esm";
 import {
   averageMissingValues,
   flatten,
@@ -7,7 +7,7 @@ import {
 } from "./utils";
 
 export default (acisData, params) => {
-  let lastDate = params.edate;
+  let lastDate = params.edateUnformatted;
   // current station
   const currentStn = acisData.get("currentStn");
 
@@ -33,7 +33,8 @@ export default (acisData, params) => {
   if (isSameYear(new Date(), new Date(params.sdate))) {
     const forecast = acisData.get("forecast");
     dates = forecast.map(arr => arr[0]);
-    lastDate = dates.slice(-1)[0];
+    lastDate = new Date(`${dates.slice(-1)[0]} 23:00`);
+
     const forecastValues = flatten(forecast.map(arr => arr[1]));
     const onlyForecastDays = forecastValues.slice(-120).map(t => t.toString());
 
@@ -60,13 +61,21 @@ export default (acisData, params) => {
   let results = [];
   hourlyDatesListUnflatted.forEach((day, i) => {
     day.forEach((h, j) => {
-      const time = getHours(h);
-      let p = {};
-      p.date = h;
-      p.temp = replacedUnflattened[i][time];
-      results.push(p);
+      if (
+        isWithinInterval(h, {
+          start: params.sdateUnformatted,
+          end: lastDate
+        })
+      ) {
+        const time = getHours(h);
+        let p = {};
+        p.date = h;
+        p.temp = replacedUnflattened[i][time];
+        results.push(p);
+      }
     });
   });
+
   console.log(results);
   return results;
 };
