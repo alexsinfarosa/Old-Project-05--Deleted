@@ -6,7 +6,9 @@ import withRoot from "../withRoot";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import compose from "recompose/compose";
 import Hidden from "@material-ui/core/Hidden";
+import withWidth from "@material-ui/core/withWidth";
 
 const styles = theme => ({
   root: {
@@ -22,29 +24,26 @@ class AppHeader extends Component {
     return (
       <div className={classes.root}>
         <AppBar position="static">
-          <Hidden only="xs">
-            <Toolbar>
-              <Typography variant="title" style={{ color: "#fff", flex: 1 }}>
+          <Toolbar>
+            <Hidden smUp>
+              <Typography variant="subheading" style={{ color: "#fff" }}>
                 Pollen Tube Growth Model Developed By Virginia Tech
               </Typography>
-            </Toolbar>
-          </Hidden>
+            </Hidden>
 
-          <Hidden smUp>
-            <Toolbar>
-              <Typography
-                variant="title"
-                style={{ color: "#fff", flex: 1, fontSize: "1.2rem" }}
-              >
+            <Hidden only="xs">
+              <Typography variant="title" style={{ color: "#fff" }}>
                 Pollen Tube Growth Model Developed By Virginia Tech
               </Typography>
-            </Toolbar>
-          </Hidden>
+            </Hidden>
+          </Toolbar>
         </AppBar>
       </div>
     );
   }
 }
 export default withRoot(
-  withStyles(styles)(inject("rootStore")(observer(AppHeader)))
+  compose(withStyles(styles), withWidth())(
+    inject("rootStore")(observer(AppHeader))
+  )
 );

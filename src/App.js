@@ -11,6 +11,9 @@ import Footer from "./components/Footer";
 import Instructions from "./components/Instructions";
 import Main from "./components/Main";
 
+// modals
+import AddBlockModal from "./components/AddBlockModal";
+
 const styles = {
   root: {
     display: "flex",
@@ -22,13 +25,13 @@ const styles = {
 class App extends Component {
   render() {
     const { classes } = this.props;
-    const { isInfo } = this.props.rootStore;
+    const { isInfo, isAddBlock } = this.props.rootStore;
     return (
       <div className={classes.root}>
         <AppHeader />
 
         {isInfo ? <Instructions /> : <Main />}
-
+        {isAddBlock && <AddBlockModal />}
         <Footer />
       </div>
     );

@@ -84,8 +84,9 @@ export default async params => {
   results.set("sisterStn", sisterStation.data);
 
   // clean data
-  return cleanFetchedData(results, params);
-
   // console.log(results);
-  // return results;
+  const cleaned = await cleanFetchedData(results, params);
+
+  // console.log(cleaned);
+  return cleaned;
 };

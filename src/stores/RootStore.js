@@ -16,6 +16,9 @@ export default class RootStore {
   isInfo = false; // put back to false
   toggleInfo = d => (this.isInfo = !this.isInfo);
 
+  isAddBlock = true;
+  openIsAddBlock = () => (this.isAddBlock = true);
+  closeIsAddBlock = () => (this.isAddBlock = false);
   // fetch data --------------------------------------------------------------
   data = [];
   setData = d => (this.data = d);
@@ -28,6 +31,9 @@ decorate(RootStore, {
   isLoading: observable,
   isInfo: observable,
   toggleInfo: action,
+  isAddBlock: observable,
+  openIsAddBlock: action,
+  closeIsAddBlock: action,
   data: observable,
   setData: action
 });

@@ -4,11 +4,16 @@ import { inject, observer } from "mobx-react";
 import { withStyles } from "@material-ui/core/styles";
 import withRoot from "../withRoot";
 import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import ListIcon from "@material-ui/icons/List";
 import Badge from "@material-ui/core/Badge";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import compose from "recompose/compose";
+import Hidden from "@material-ui/core/Hidden";
+import withWidth from "@material-ui/core/withWidth";
 
 const styles = theme => ({
   root: {
@@ -19,6 +24,9 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4
   },
   button: {
+    margin: theme.spacing.unit * 2
+  },
+  buttonMobile: {
     margin: theme.spacing.unit * 2
   },
   padding: {
@@ -37,39 +45,94 @@ const styles = theme => ({
 class TopControlBar extends Component {
   render() {
     const { classes } = this.props;
+    const { openIsAddBlock } = this.props.rootStore;
     return (
       <div className={classes.root}>
-        <Button variant="outlined" color="primary" className={classes.button}>
-          ADD BLOCK
-        </Button>
-
-        <form autoComplete="off" className={classes.form}>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="blockList">Select Block</InputLabel>
-            <Select
-              value={10}
-              // style={{ width: 200 }}
-              // onChange={this.handleChange}
-              inputProps={{
-                name: "blockList",
-                id: "blockList"
-              }}
+        <Hidden smUp>
+          <form autoComplete="off" className={classes.form}>
+            <FormControl
+              className={classes.formControl}
+              style={{ marginLeft: 0 }}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-            </Select>
-          </FormControl>
-        </form>
+              <InputLabel htmlFor="blockList">Select Block</InputLabel>
+              <Select
+                native
+                value={undefined}
+                // style={{ width: 200 }}
+                // onChange={this.handleChange}
+                inputProps={{
+                  name: "blockList",
+                  id: "blockList"
+                }}
+              >
+                <MenuItem value="" />
+                <MenuItem value={10}>Ten</MenuItem>
+              </Select>
+            </FormControl>
+          </form>
 
-        <Badge color="primary" badgeContent={4} className={classes.button}>
-          <Button variant="outlined" color="primary">
-            BLOCK LIST
+          <div>
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="add"
+              className={classes.buttonMobile}
+              onClick={openIsAddBlock}
+            >
+              <AddIcon />
+            </Button>
+
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="add"
+              className={classes.buttonMobile}
+            >
+              <ListIcon />
+            </Button>
+          </div>
+        </Hidden>
+
+        <Hidden only="xs">
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.button}
+            onClick={openIsAddBlock}
+          >
+            ADD BLOCK
           </Button>
-        </Badge>
+
+          <form autoComplete="off" className={classes.form}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="blockList">Select Block</InputLabel>
+              <Select
+                value={undefined}
+                // style={{ width: 200 }}
+                // onChange={this.handleChange}
+                inputProps={{
+                  name: "blockList",
+                  id: "blockList"
+                }}
+              >
+                <MenuItem value="" />
+                <MenuItem value={10}>Ten</MenuItem>
+              </Select>
+            </FormControl>
+          </form>
+
+          <Badge color="primary" badgeContent={4} className={classes.button}>
+            <Button variant="outlined" color="primary">
+              BLOCK LIST
+            </Button>
+          </Badge>
+        </Hidden>
       </div>
     );
   }
 }
 export default withRoot(
-  withStyles(styles)(inject("rootStore")(observer(TopControlBar)))
+  compose(withStyles(styles), withWidth())(
+    inject("rootStore")(observer(TopControlBar))
+  )
 );
