@@ -8,9 +8,9 @@ import AddIcon from "@material-ui/icons/Add";
 import ListIcon from "@material-ui/icons/List";
 import Badge from "@material-ui/core/Badge";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
 import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
+import Input from "@material-ui/core/Input";
 import compose from "recompose/compose";
 import Hidden from "@material-ui/core/Hidden";
 import withWidth from "@material-ui/core/withWidth";
@@ -55,8 +55,7 @@ class TopControlBar extends Component {
               style={{ marginLeft: 0 }}
             >
               <InputLabel htmlFor="blockList">Select Block</InputLabel>
-              <Select
-                native
+              <NativeSelect
                 value={undefined}
                 // style={{ width: 200 }}
                 // onChange={this.handleChange}
@@ -65,9 +64,9 @@ class TopControlBar extends Component {
                   id: "blockList"
                 }}
               >
-                <MenuItem value="" />
-                <MenuItem value={10}>Ten</MenuItem>
-              </Select>
+                <option value="" />
+                <option value={10}>Apple field 458H</option>
+              </NativeSelect>
             </FormControl>
           </form>
 
@@ -105,19 +104,15 @@ class TopControlBar extends Component {
 
           <form autoComplete="off" className={classes.form}>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="blockList">Select Block</InputLabel>
-              <Select
+              <InputLabel htmlFor="blockList">Block</InputLabel>
+              <NativeSelect
                 value={undefined}
-                // style={{ width: 200 }}
                 // onChange={this.handleChange}
-                inputProps={{
-                  name: "blockList",
-                  id: "blockList"
-                }}
+                input={<Input id="blockList" />}
               >
-                <MenuItem value="" />
-                <MenuItem value={10}>Ten</MenuItem>
-              </Select>
+                <option value="" />
+                <option value={10}>Apple field 458H</option>
+              </NativeSelect>
             </FormControl>
           </form>
 

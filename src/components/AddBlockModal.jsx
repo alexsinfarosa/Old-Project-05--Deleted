@@ -14,9 +14,7 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import TextField from "@material-ui/core/TextField";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
 const styles = theme => ({
@@ -65,7 +63,7 @@ class AddBlockModal extends Component {
             <form className={classes.container} noValidate autoComplete="off">
               <FormControl className={classes.formControl}>
                 <TextField
-                  label="Block name"
+                  label="Name"
                   placeholder="min. 3 letters"
                   className={classes.textField}
                   margin="normal"
@@ -73,44 +71,39 @@ class AddBlockModal extends Component {
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">
-                  Apple Variety
-                </InputLabel>
-                <Select
-                  native
+                <InputLabel htmlFor="variety">Variety</InputLabel>
+                <NativeSelect
                   value={undefined}
                   // onChange={this.handleChange("age")}
-                  input={<Input id="age-native-simple" />}
+                  input={<Input id="variety" />}
                 >
                   <option value="" />
                   <option value={10}>Golden Delicious</option>
-                </Select>
+                </NativeSelect>
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">State</InputLabel>
-                <Select
-                  native
+                <InputLabel htmlFor="state">State</InputLabel>
+                <NativeSelect
                   value={undefined}
                   // onChange={this.handleChange("age")}
-                  input={<Input id="age-native-simple" />}
+                  input={<Input id="state" />}
                 >
                   <option value="" />
                   <option value={10}>New York</option>
-                </Select>
+                </NativeSelect>
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Station</InputLabel>
-                <Select
-                  native
+                <InputLabel htmlFor="station">Station</InputLabel>
+                <NativeSelect
                   value={undefined}
                   // onChange={this.handleChange("age")}
-                  input={<Input id="age-native-simple" />}
+                  input={<Input id="station" />}
                 >
                   <option value="" />
                   <option value={10}>Accord</option>
-                </Select>
+                </NativeSelect>
               </FormControl>
             </form>
           </DialogContent>
