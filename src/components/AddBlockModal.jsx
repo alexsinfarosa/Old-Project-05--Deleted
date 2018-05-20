@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
+// data
+import { growthRates } from "../assets/growthRates";
+
+// material-ui
 import { withStyles } from "@material-ui/core/styles";
 import withRoot from "../withRoot";
-
-// import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -44,6 +46,35 @@ class AddBlockModal extends Component {
   render() {
     const { classes, fullScreen } = this.props;
     const { isAddBlock, closeIsAddBlock } = this.props.rootStore;
+
+    const {
+      name,
+      varietyName,
+      statePostalCode,
+      states,
+      stationID,
+      currentStateStations,
+      setField
+    } = this.props.rootStore.blocksStore.block;
+
+    const varietyList = growthRates.map(variety => (
+      <option key={variety.name} value={variety.name}>
+        {variety.name}
+      </option>
+    ));
+
+    const stateList = states.map(state => (
+      <option key={state.id} value={state.id}>
+        {state.name}
+      </option>
+    ));
+
+    const stationList = currentStateStations.map(stn => (
+      <option key={stn.id} value={stn.id}>
+        {stn.name}
+      </option>
+    ));
+
     return (
       <div className={classes.root}>
         <Dialog
@@ -67,42 +98,49 @@ class AddBlockModal extends Component {
                   placeholder="min. 3 letters"
                   className={classes.textField}
                   margin="normal"
+                  // value={name}
+                  onChange={setField("name")}
                 />
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="variety">Variety</InputLabel>
+                <InputLabel htmlFor="varietyName">Variety</InputLabel>
                 <NativeSelect
-                  value={undefined}
-                  // onChange={this.handleChange("age")}
-                  input={<Input id="variety" />}
+                  value={varietyName}
+                  onChange={setField("varietyName")}
+                  input={<Input id="varietyName" />}
                 >
                   <option value="" />
-                  <option value={10}>Golden Delicious</option>
+                  {varietyList}
                 </NativeSelect>
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="state">State</InputLabel>
+                <InputLabel htmlFor="statePostalCode">State</InputLabel>
                 <NativeSelect
-                  value={undefined}
-                  // onChange={this.handleChange("age")}
-                  input={<Input id="state" />}
+                  value={statePostalCode}
+                  onChange={setField("statePostalCode")}
+                  input={<Input id="statePostalCode" />}
                 >
                   <option value="" />
-                  <option value={10}>New York</option>
+                  {stateList}
                 </NativeSelect>
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="station">Station</InputLabel>
+                <InputLabel htmlFor="station">
+                  Station{" "}
+                  {currentStateStations.length !== 0
+                    ? `(${currentStateStations.length})`
+                    : ""}
+                </InputLabel>
                 <NativeSelect
-                  value={undefined}
-                  // onChange={this.handleChange("age")}
+                  value={stationID}
+                  onChange={setField("stationID")}
                   input={<Input id="station" />}
                 >
                   <option value="" />
-                  <option value={10}>Accord</option>
+                  {stationList}
                 </NativeSelect>
               </FormControl>
             </form>
@@ -120,6 +158,7 @@ class AddBlockModal extends Component {
               style={{ marginBottom: 16 }}
               onClick={() => {
                 console.log("create block");
+                this.props.rootStore.blocksStore.block.addBlock();
                 closeIsAddBlock();
               }}
               color="primary"
@@ -135,6 +174,6 @@ class AddBlockModal extends Component {
 }
 export default withRoot(
   withStyles(styles)(
-    inject("rootStore")(observer(withMobileDialog()(AddBlockModal)))
+    inject("rootStore")(withMobileDialog()(observer(AddBlockModal)))
   )
 );

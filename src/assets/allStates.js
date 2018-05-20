@@ -1,4 +1,4 @@
-export const states = {
+export const allStates = {
   AL: {
     bbox: [
       [30.1375217437744, -88.4731369018555],

@@ -26,6 +26,7 @@ class App extends Component {
   render() {
     const { classes } = this.props;
     const { isInfo, isAddBlock } = this.props.rootStore;
+    console.log(this.props.rootStore);
     return (
       <div className={classes.root}>
         <AppHeader />

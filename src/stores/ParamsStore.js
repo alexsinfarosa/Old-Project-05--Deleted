@@ -1,10 +1,9 @@
 import { decorate, observable, action, when, computed } from "mobx";
-import { states } from "../assets/states";
+import { allStates } from "../assets/allStates";
 import { fetchAllStations } from "../utils/fetchData";
 import { idAdjustment } from "../utils/utils";
 import { getYear, format, subDays, isAfter, isSameYear } from "date-fns/esm";
 import { elements } from "../assets/elements";
-import { growthRates } from "../assets/growthRates";
 
 export default class ParamsStore {
   constructor() {
@@ -15,19 +14,13 @@ export default class ParamsStore {
   variety = "";
   setVariety = d => (this.variety = d);
 
-  get varieties() {
-    return growthRates.map(v => v.name);
-  }
-
   // average style length ------------------------------------------------------
   avgStyleLength;
   setAvgStyleLength = d => (this.avgStyleLength = d);
 
   // states ---------------------------------------------------------------------
-  stateIDs = Object.keys(states);
-  get states() {
-    return this.stateIDs.map(id => states[id]);
-  }
+  states = Object.keys(allStates).map(id => allStates[id]);
+
   // state
   postalCode = "";
   setPostalCode = e => (this.postalCode = e.target.value);
@@ -88,11 +81,8 @@ export default class ParamsStore {
 decorate(ParamsStore, {
   variety: observable,
   setVariety: action,
-  varieties: computed,
   avgStyleLength: observable,
   setAvgStyleLength: action,
-  stateIDs: observable,
-  states: computed,
   postalCode: observable,
   setPostalCode: action,
   state: computed,
