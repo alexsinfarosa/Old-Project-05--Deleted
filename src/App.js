@@ -25,8 +25,8 @@ const styles = {
 class App extends Component {
   render() {
     const { classes } = this.props;
-    const { isInfo, isAddBlock } = this.props.rootStore;
-    console.log(this.props.rootStore);
+    const { isInfo, isAddBlock } = this.props.app.view;
+
     return (
       <div className={classes.root}>
         <AppHeader />
@@ -39,4 +39,4 @@ class App extends Component {
   }
 }
 
-export default withRoot(withStyles(styles)(inject("rootStore")(observer(App))));
+export default withRoot(withStyles(styles)(inject("app")(observer(App))));

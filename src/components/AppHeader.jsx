@@ -43,7 +43,5 @@ class AppHeader extends Component {
   }
 }
 export default withRoot(
-  compose(withStyles(styles), withWidth())(
-    inject("rootStore")(observer(AppHeader))
-  )
+  compose(withStyles(styles), withWidth())(inject("app")(observer(AppHeader)))
 );

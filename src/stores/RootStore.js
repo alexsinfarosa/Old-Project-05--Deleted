@@ -1,28 +1,15 @@
-import { decorate, observable, action, when } from "mobx";
+import { decorate, observable, action } from "mobx";
 import { allStates } from "../assets/allStates";
-import { fetchAllStations } from "../utils/fetchData";
 
-import BlocksStore from "./BlocksStore";
+import BlockStore from "./BlockStore";
 
 export default class RootStore {
   constructor() {
-    when(
-      () => this.stations.length === 0,
-      () =>
-        fetchAllStations().then(res => {
-          console.log("called");
-          this.setStations(res);
-          this.blocksStore = new BlocksStore(this.states, this.stations);
-        })
-    );
+    this.blockStore = new BlockStore(this);
   }
 
   // states --------------------------------------------------------------------
   states = Object.keys(allStates).map(id => allStates[id]);
-
-  // stations ------------------------------------------------------------------
-  stations = [];
-  setStations = d => (this.stations = d);
 
   // logic ---------------------------------------------------------------------
   isLoading = false;
@@ -32,15 +19,18 @@ export default class RootStore {
   isAddBlock = false;
   openIsAddBlock = () => (this.isAddBlock = true);
   closeIsAddBlock = () => (this.isAddBlock = false);
+
+  isBlockList = false;
+  openIsBlockList = d => (this.isBlockList = true);
 }
 
 decorate(RootStore, {
-  stations: observable,
-  setStations: action,
   isLoading: observable,
   isInfo: observable,
   toggleInfo: action,
   isAddBlock: observable,
   openIsAddBlock: action,
-  closeIsAddBlock: action
+  closeIsAddBlock: action,
+  isBlockList: observable,
+  openIsBlockList: action
 });

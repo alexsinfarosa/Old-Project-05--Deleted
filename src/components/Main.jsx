@@ -4,6 +4,9 @@ import { inject, observer } from "mobx-react";
 // components
 import TopControlBar from "./TopControlBar";
 
+// components
+import BlockList from "./BlockList";
+
 // material-ui
 import { withStyles } from "@material-ui/core/styles";
 import withRoot from "../withRoot";
@@ -11,11 +14,7 @@ import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    flexDirection: "column",
     flex: 1,
-    maxWidth: 1200,
-    margin: "0 auto",
     padding: theme.spacing.unit * 2
   }
 });
@@ -23,20 +22,26 @@ const styles = theme => ({
 class Main extends Component {
   render() {
     const { classes } = this.props;
+    const { isBlockList } = this.props.app.view;
+
     return (
       <div className={classes.root}>
-        <TopControlBar />
-        <Typography>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          dolores porro obcaecati maiores incidunt delectus eius omnis, debitis
-          saepe necessitatibus commodi, ad laboriosam nisi dolore, totam numquam
-          unde nulla quod?
-        </Typography>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <TopControlBar />
+          {isBlockList ? (
+            <BlockList />
+          ) : (
+            <Typography>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum,
+              voluptatem culpa. Dolore, dicta a suscipit provident aliquam
+              labore architecto odio minima voluptatibus error aspernatur ipsum
+              nemo. Excepturi optio perferendis suscipit.
+            </Typography>
+          )}
+        </div>
       </div>
     );
   }
 }
 
-export default withRoot(
-  withStyles(styles)(inject("rootStore")(observer(Main)))
-);
+export default withRoot(withStyles(styles)(inject("app")(observer(Main))));

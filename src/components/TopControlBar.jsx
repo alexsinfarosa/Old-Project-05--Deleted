@@ -45,7 +45,8 @@ const styles = theme => ({
 class TopControlBar extends Component {
   render() {
     const { classes } = this.props;
-    const { openIsAddBlock } = this.props.rootStore;
+    const { openIsAddBlock, openIsBlockList } = this.props.app.view;
+
     return (
       <div className={classes.root}>
         <Hidden smUp>
@@ -57,7 +58,6 @@ class TopControlBar extends Component {
               <InputLabel htmlFor="blockList">Select Block</InputLabel>
               <NativeSelect
                 value={undefined}
-                // style={{ width: 200 }}
                 // onChange={this.handleChange}
                 inputProps={{
                   name: "blockList",
@@ -74,7 +74,7 @@ class TopControlBar extends Component {
             <Button
               variant="fab"
               color="primary"
-              aria-label="add"
+              aria-label="open add block modal"
               className={classes.buttonMobile}
               onClick={openIsAddBlock}
             >
@@ -84,8 +84,9 @@ class TopControlBar extends Component {
             <Button
               variant="fab"
               color="primary"
-              aria-label="add"
+              aria-label="open block list"
               className={classes.buttonMobile}
+              onClick={openIsBlockList}
             >
               <ListIcon />
             </Button>
@@ -117,7 +118,11 @@ class TopControlBar extends Component {
           </form>
 
           <Badge color="primary" badgeContent={4} className={classes.button}>
-            <Button variant="outlined" color="primary">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={openIsBlockList}
+            >
               BLOCK LIST
             </Button>
           </Badge>
@@ -128,6 +133,6 @@ class TopControlBar extends Component {
 }
 export default withRoot(
   compose(withStyles(styles), withWidth())(
-    inject("rootStore")(observer(TopControlBar))
+    inject("app")(observer(TopControlBar))
   )
 );

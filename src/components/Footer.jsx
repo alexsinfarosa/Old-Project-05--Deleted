@@ -24,7 +24,7 @@ const styles = theme => ({
 class Footer extends Component {
   render() {
     const { classes } = this.props;
-    const { isInfo, toggleInfo } = this.props.rootStore;
+    const { isInfo, toggleInfo } = this.props.app.view;
     return (
       <Fragment>
         <Typography variant="caption" className={classes.footer}>
@@ -48,6 +48,4 @@ class Footer extends Component {
   }
 }
 
-export default withRoot(
-  withStyles(styles)(inject("rootStore")(observer(Footer)))
-);
+export default withRoot(withStyles(styles)(inject("app")(observer(Footer))));

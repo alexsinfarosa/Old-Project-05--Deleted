@@ -21,7 +21,7 @@ const styles = theme => ({
 class Instructions extends Component {
   render() {
     const { classes } = this.props;
-    const { toggleInfo } = this.props.rootStore;
+    const { toggleInfo } = this.props.app.view;
     return (
       <div className={classes.root}>
         <IconButton
@@ -126,5 +126,5 @@ class Instructions extends Component {
 }
 
 export default withRoot(
-  withStyles(styles)(inject("rootStore")(observer(Instructions)))
+  withStyles(styles)(inject("app")(observer(Instructions)))
 );

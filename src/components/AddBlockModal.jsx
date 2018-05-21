@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import { Block } from "../models/BlockStore";
 
 // data
 import { growthRates } from "../assets/growthRates";
+import { allStates } from "../assets/allStates";
 
 // material-ui
 import { withStyles } from "@material-ui/core/styles";
@@ -43,19 +45,26 @@ const styles = theme => ({
 });
 
 class AddBlockModal extends Component {
+  state = {
+    block: Block.create({
+      name: "",
+      variety: "",
+      statePostalCode: "",
+      stationID: ""
+    })
+  };
+
+  onAdd = () => {
+    this.props.app.blockStore.add(this.state.block);
+    this.props.app.view.closeIsAddBlock();
+  };
+
   render() {
     const { classes, fullScreen } = this.props;
-    const { isAddBlock, closeIsAddBlock } = this.props.rootStore;
-
-    const {
-      name,
-      varietyName,
-      statePostalCode,
-      states,
-      stationID,
-      currentStateStations,
-      setField
-    } = this.props.rootStore.blocksStore.block;
+    const { isAddBlock, closeIsAddBlock } = this.props.app.view;
+    const { block } = this.state;
+    console.log(this.props);
+    console.log(block);
 
     const varietyList = growthRates.map(variety => (
       <option key={variety.name} value={variety.name}>
@@ -63,17 +72,19 @@ class AddBlockModal extends Component {
       </option>
     ));
 
-    const stateList = states.map(state => (
-      <option key={state.id} value={state.id}>
-        {state.name}
-      </option>
-    ));
+    const stateList = Object.keys(allStates)
+      .map(id => allStates[id])
+      .map(state => (
+        <option key={state.id} value={state.id}>
+          {state.name}
+        </option>
+      ));
 
-    const stationList = currentStateStations.map(stn => (
-      <option key={stn.id} value={stn.id}>
-        {stn.name}
-      </option>
-    ));
+    // const stationList = currentStateStations.map(stn => (
+    //   <option key={stn.id} value={stn.id}>
+    //     {stn.name}
+    //   </option>
+    // ));
 
     return (
       <div className={classes.root}>
@@ -98,17 +109,17 @@ class AddBlockModal extends Component {
                   placeholder="min. 3 letters"
                   className={classes.textField}
                   margin="normal"
-                  // value={name}
-                  onChange={setField("name")}
+                  // value={block.name}
+                  onChange={e => block.setField("name", e)}
                 />
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="varietyName">Variety</InputLabel>
+                <InputLabel htmlFor="variety">Variety</InputLabel>
                 <NativeSelect
-                  value={varietyName}
-                  onChange={setField("varietyName")}
-                  input={<Input id="varietyName" />}
+                  // value={block.variety}
+                  onChange={e => block.setField("variety", e)}
+                  input={<Input id="variety" />}
                 >
                   <option value="" />
                   {varietyList}
@@ -118,8 +129,8 @@ class AddBlockModal extends Component {
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="statePostalCode">State</InputLabel>
                 <NativeSelect
-                  value={statePostalCode}
-                  onChange={setField("statePostalCode")}
+                  value={block.statePostalCode}
+                  onChange={e => block.setField("statePostalCode", e)}
                   input={<Input id="statePostalCode" />}
                 >
                   <option value="" />
@@ -128,19 +139,18 @@ class AddBlockModal extends Component {
               </FormControl>
 
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="station">
+                <InputLabel htmlFor="stationID">
                   Station{" "}
-                  {currentStateStations.length !== 0
+                  {/**currentStateStations.length !== 0
                     ? `(${currentStateStations.length})`
-                    : ""}
+                  : ""**/}
                 </InputLabel>
                 <NativeSelect
-                  value={stationID}
-                  onChange={setField("stationID")}
-                  input={<Input id="station" />}
+                  value={block.stationID}
+                  onChange={e => block.setField("stationID", e)}
+                  input={<Input id="stationID" />}
                 >
                   <option value="" />
-                  {stationList}
                 </NativeSelect>
               </FormControl>
             </form>
@@ -156,11 +166,7 @@ class AddBlockModal extends Component {
             </Button>
             <Button
               style={{ marginBottom: 16 }}
-              onClick={() => {
-                console.log("create block");
-                this.props.rootStore.blocksStore.block.addBlock();
-                closeIsAddBlock();
-              }}
+              onClick={this.onAdd}
               color="primary"
               autoFocus
             >
@@ -173,7 +179,5 @@ class AddBlockModal extends Component {
   }
 }
 export default withRoot(
-  withStyles(styles)(
-    inject("rootStore")(withMobileDialog()(observer(AddBlockModal)))
-  )
+  withStyles(styles)(inject("app")(withMobileDialog()(observer(AddBlockModal))))
 );
